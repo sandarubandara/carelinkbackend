@@ -6,6 +6,7 @@ import com.example.carelinkbackend.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
   
-    Boolean existsByEmail(String email);
+    User findByUsername(String username);
+    boolean existsByUsername(String username);
 
 }

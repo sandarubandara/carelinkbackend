@@ -13,11 +13,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "username"),
+                    @UniqueConstraint(columnNames = "email")})
 public class User {
 
     @Id
@@ -26,7 +28,12 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
-    private String email;
+    private String username;
+
+    @NotBlank
+	@Size(max = 50)
+	@Email
+	private String email;
 
     @NotBlank
     @Size(max = 120)
@@ -41,35 +48,20 @@ public class User {
     public User() {
     }
 
-    
-
-    
-
-    public User(@NotBlank @Size(max = 50) String email, @NotBlank @Size(max = 120) String password) {
+    public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 50) @Email String email,
+            @NotBlank @Size(max = 120) String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
 
-
-    public User(long id, @NotBlank @Size(max = 50) String email, @NotBlank @Size(max = 120) String password,
-            Set<Role> roles) {
-        this.id = id;
+    public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 50) @Email String email,
+            @NotBlank @Size(max = 120) String password, Set<Role> roles) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.roles = roles;
     }
-
-    
-
-    public User(@NotBlank @Size(max = 50) String email, @NotBlank @Size(max = 120) String password, Set<Role> roles) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-
-
-
-
 
     public long getId() {
         return id;
@@ -77,6 +69,14 @@ public class User {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -103,6 +103,8 @@ public class User {
         this.roles = roles;
     }
 
+   
     
+ 
     
 }
