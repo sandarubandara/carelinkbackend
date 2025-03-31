@@ -3,11 +3,17 @@ package com.example.carelinkbackend.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -16,8 +22,9 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.persistence.InheritanceType;
 
-@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "username"),
                     @UniqueConstraint(columnNames = "email")})
 public class User {
@@ -25,6 +32,12 @@ public class User {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @NotBlank
     @Size(max = 50)
@@ -39,29 +52,57 @@ public class User {
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "user_roles", 
-	           joinColumns = @JoinColumn(name = "user_id"),
-	           inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private boolean active = true;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "user_roles", 
+	           joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<EnumRole> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 50) @Email String email,
-            @NotBlank @Size(max = 120) String password) {
+
+    public User(String firstName, String lastName, @NotBlank @Size(max = 50) String username,
+            @NotBlank @Size(max = 50) @Email String email, @NotBlank @Size(max = 120) String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public User(@NotBlank @Size(max = 50) String username, @NotBlank @Size(max = 50) @Email String email,
-            @NotBlank @Size(max = 120) String password, Set<Role> roles) {
+    
+
+
+    
+
+
+    public User(String firstName, String lastName, @NotBlank @Size(max = 50) String username,
+            @NotBlank @Size(max = 50) @Email String email, @NotBlank @Size(max = 120) String password, boolean active,
+            Set<EnumRole> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.active = active;
+        this.roles = roles;
+    }
+
+
+    public User(String firstName, String lastName, @NotBlank @Size(max = 50) String username,
+            @NotBlank @Size(max = 50) @Email String email, @NotBlank @Size(max = 120) String password,
+            Set<EnumRole> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.password = password;
         this.roles = roles;
     }
+
 
     public long getId() {
         return id;
@@ -95,11 +136,39 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+   
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
+    public Set<EnumRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+
+    public void setRoles(Set<EnumRole> roles) {
         this.roles = roles;
     }
 
