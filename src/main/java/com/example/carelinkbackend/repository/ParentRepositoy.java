@@ -8,7 +8,7 @@ import com.example.carelinkbackend.model.Parent;
 
 public interface ParentRepositoy extends JpaRepository<Parent, Long> {
     
-    Optional<Parent> findByUserId(String name);
+    //Optional<Parent> findByUserId(String name);
     
 
 }

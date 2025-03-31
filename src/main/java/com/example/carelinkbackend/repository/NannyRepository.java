@@ -13,8 +13,8 @@ public interface NannyRepository extends JpaRepository<Nanny, Long> {
     
    
     //List<Nanny> findAll();
-    Nanny findByUserId(long currentUserId);
-    Nanny findNannyById(long nannyId);
-    Optional<Nanny> findByNannyByUserId(long userId);
+    // Nanny findByUserId(long currentUserId);
+    // Nanny findNannyById(long nannyId);
+    // Optional<Nanny> findByNannyByUserId(long userId);
 
 }
