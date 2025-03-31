@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.carelinkbackend.dto.requests.RegisterRequest;
+import com.example.carelinkbackend.dto.response.MessageResponse;
 import com.example.carelinkbackend.model.EnumRole;
 import com.example.carelinkbackend.model.Nanny;
 import com.example.carelinkbackend.model.Role;
 import com.example.carelinkbackend.model.User;
 import com.example.carelinkbackend.repository.RoleRepository;
 import com.example.carelinkbackend.repository.UserRepository;
-import com.example.carelinkbackend.requests.RegisterRequest;
 import com.example.carelinkbackend.security.JwtUtil;
 
 import jakarta.validation.Valid;
@@ -33,6 +34,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/carelink")
 public class RegistrationController {
+
+	/*
 
     @Autowired
     UserRepository userRepository;
@@ -56,8 +59,12 @@ public class RegistrationController {
 		
 
 			if (userRepository.existsByUsername(registerRequest.getUsername())) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return ResponseEntity.badRequest().body(new MessageResponse("Error: The username is already exist!"));			
 			}
+			if (userRepository.existsByEmail(registerRequest.getEmail())) {
+				return ResponseEntity.badRequest().body(new MessageResponse("Error: The email is already exist!"));
+			}
+
 
 			// Create new user's account
 			User _user = new User(registerRequest.getUsername(),registerRequest.getEmail(),encoder.encode(registerRequest.getPassword()));
@@ -93,9 +100,9 @@ public class RegistrationController {
 			_user.setRoles(roles);
 			userRepository.save(_user);
 
-			//return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-			return new ResponseEntity<>(_user, HttpStatus.CREATED);
+			return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+			//return new ResponseEntity<>(_user, HttpStatus.CREATED);
 	}
 
-
+	*/
 }
